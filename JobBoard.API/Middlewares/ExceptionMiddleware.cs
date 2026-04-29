@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using System.Net;
 using System.Text.Json;
 
@@ -30,7 +30,7 @@ namespace JobBoard.API.Middlewares
 
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";

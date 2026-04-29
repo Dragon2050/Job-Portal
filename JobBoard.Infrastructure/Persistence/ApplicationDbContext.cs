@@ -18,6 +18,7 @@ namespace JobBoard.Infrastructure.Persistence
 
         public DbSet<Job> Jobs => Set<Job>();
         public DbSet<User> Users => Set<User>();
+        public DbSet<JobBoard.Domain.Entities.Application> Applications => Set<JobBoard.Domain.Entities.Application>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

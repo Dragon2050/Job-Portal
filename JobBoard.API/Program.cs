@@ -12,7 +12,6 @@ using JobBoard.Infrastructure.Auth;
 using JobBoard.Infrastructure.Persistence;
 using JobBoard.Infrastructure.Repositories;
 using MediatR;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IApplicationRepository,ApplicationRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateJobCommandValidator>();
 builder.Services.AddAutoMapper(cfg =>
 {
@@ -79,15 +79,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         var jwt = builder.Configuration.GetSection("JwtSettings");
 
-        var key = Encoding.UTF8.GetBytes(jwt["Key"]);
+        var key = Encoding.UTF8.GetBytes(jwt["Key"] ?? throw new InvalidOperationException("JWT Key is missing"));
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,        // 🔥 disable for now
-            ValidateAudience = false,      // 🔥 disable for now
+            ValidateIssuer = true,
+            ValidIssuer = jwt["Issuer"], // Read from appsettings.json
+            
+            ValidateAudience = true,
+            ValidAudience = jwt["Audience"], // Read from appsettings.json
+            
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });

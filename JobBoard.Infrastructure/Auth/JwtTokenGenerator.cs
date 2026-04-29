@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using JobBoard.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -32,7 +31,7 @@ namespace JobBoard.Infrastructure.Auth
 };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwt["Key"]));
+                Encoding.UTF8.GetBytes(jwt["Key"] ?? throw new InvalidOperationException("JWT Key is missing")));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
