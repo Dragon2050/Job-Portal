@@ -31,5 +31,12 @@ namespace JobBoard.Infrastructure.Repositories
             .Where(a=> a.JobId == jobId)
             .ToListAsync();
         }
+        public async Task<IEnumerable<DomainApplication>> GetByCandidateIdAsync(Guid candidateId)
+        {
+            return await _context.Applications
+            .Include(a=>a.Job)
+            .Where(a=>a.CandidateId == candidateId)
+            .ToListAsync();
+        }
     }
 }

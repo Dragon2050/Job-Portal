@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using JobBoard.Application.Features.Applications.Queries;
 
 namespace JobBoard.API.Controllers
 {
@@ -47,6 +48,63 @@ namespace JobBoard.API.Controllers
             {
                 // If they already applied, or the job doesn't exist, our Handler throws an exception.
                 // We catch it here and return a Bad Request.
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "Recruiter")]
+        [HttpGet("job/{jobId}")]
+        public async Task<IActionResult> GetApplicationsForJob(Guid jobId)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if(userIdClaim == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            var recruiterId = Guid.Parse(userIdClaim.Value);
+            try{
+                var applications = await _mediator.Send(new GetApplicationsForJobQuery 
+                {
+                    JobId= jobId,
+                    RecruiterId = recruiterId
+                });
+                return Ok(applications);
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                // Returns 403 Forbidden
+                return StatusCode(403, new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "Candidate")]
+        [HttpGet("my-applications")]
+        public async Task<IActionResult> GetMyApplications()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if(userIdClaim == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            var candidateId = Guid.Parse(userIdClaim.Value);
+            
+            var query = new GetMyApplicationsQuery
+            {
+                CandidateId = candidateId
+            };
+            
+            try{
+                var applications = await _mediator.Send(query);
+                return Ok(applications);
+            }
+            catch(Exception ex)
+            {
                 return BadRequest(new { Error = ex.Message });
             }
         }
