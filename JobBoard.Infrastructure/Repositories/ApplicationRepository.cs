@@ -22,7 +22,9 @@ namespace JobBoard.Infrastructure.Repositories
 
         public async Task<DomainApplication?> GetByIdAsync(Guid id)
         {
-            return await _context.Applications.FirstOrDefaultAsync(a=> a.Id==id);
+            return await _context.Applications
+            .Include(a=>a.Job)
+            .FirstOrDefaultAsync(a=> a.Id==id);
         }
 
         public async Task<IEnumerable<DomainApplication>> GetByJobIdAsync(Guid jobId)
@@ -37,6 +39,12 @@ namespace JobBoard.Infrastructure.Repositories
             .Include(a=>a.Job)
             .Where(a=>a.CandidateId == candidateId)
             .ToListAsync();
+        }
+
+        public async Task UpdateAsync(DomainApplication application)
+        {
+            _context.Applications.Update(application);
+            await _context.SaveChangesAsync();
         }
     }
 }

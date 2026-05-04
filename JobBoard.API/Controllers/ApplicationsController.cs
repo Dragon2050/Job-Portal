@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using JobBoard.Application.Features.Applications.Queries;
+using JobBoard.Application.Features.Applications.DTOs;
 
 namespace JobBoard.API.Controllers
 {
@@ -102,6 +103,39 @@ namespace JobBoard.API.Controllers
             try{
                 var applications = await _mediator.Send(query);
                 return Ok(applications);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "Recruiter")]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateApplicationStatusRequestDto request)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if(userIdClaim == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            var recruiterId = Guid.Parse(userIdClaim.Value);
+
+            var Command = new UpdateApplicationStatusCommand
+            {
+                ApplicationId = id,
+                Status = request.status,
+                RecruiterId = recruiterId
+            };
+            try
+            {
+                await _mediator.Send(Command);
+                return NoContent();
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                // Returns 403 Forbidden
+                return StatusCode(403, new { Error = ex.Message });
             }
             catch(Exception ex)
             {

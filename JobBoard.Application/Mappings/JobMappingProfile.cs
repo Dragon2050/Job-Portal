@@ -14,6 +14,7 @@ namespace JobBoard.Application.Mappings
         public JobMappingProfile()
         {
             CreateMap<Job, JobResponseDto>();
+            CreateMap<Job, RecruiterJobDto>();
         }
     }
 }

@@ -12,5 +12,6 @@ namespace JobBoard.Domain.Interfaces
         Task<Job?> GetByIdAsync(Guid id);
         Task<IEnumerable<Job>> GetAllAsync();
         Task AddAsync(Job job);
+        Task<IEnumerable<Job?>> GetJobsByRecruiterIdAsync(Guid recruiterId);
     }
 }

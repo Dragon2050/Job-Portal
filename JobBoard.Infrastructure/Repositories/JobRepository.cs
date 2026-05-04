@@ -33,5 +33,12 @@ namespace JobBoard.Infrastructure.Repositories
         {
             return await _context.Jobs.FirstOrDefaultAsync(x => x.Id == id);
         }
+        
+        public async Task<IEnumerable<Job?>> GetJobsByRecruiterIdAsync(Guid recruiterId)
+        {
+            return await _context.Jobs
+                .Where(j=>j.CreatedById == recruiterId)
+                .ToListAsync();
+        }
     }
 }

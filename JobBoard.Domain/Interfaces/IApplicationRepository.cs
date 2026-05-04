@@ -13,5 +13,6 @@ namespace JobBoard.Domain.Interfaces
         Task<IEnumerable<Application>> GetByJobIdAsync(Guid jobId);
         Task AddAsync(Application application);
         Task<IEnumerable<Application>> GetByCandidateIdAsync(Guid CandidateId);
+        Task UpdateAsync(Application application);
     }
 }

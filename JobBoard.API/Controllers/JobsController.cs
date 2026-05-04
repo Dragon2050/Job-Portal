@@ -36,5 +36,29 @@ namespace JobBoard.API.Controllers
             var result = await _mediator.Send(new GetJobByIdQuery(id));
             return Ok(result);
         }
+        [Authorize(Roles = "Recruiter")]
+        [HttpGet("my-created-jobs")]
+        public async Task<IActionResult> GetMyCreatedJobs()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if(userIdClaim == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            var recruiterId = Guid.Parse(userIdClaim.Value);
+            var query = new GetMyJobsQuery
+            {
+                RecruiterId = recruiterId
+            };
+            try
+            {
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message});
+            }
+        }
     }
 }
