@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +13,6 @@ namespace JobBoard.Domain.Interfaces
         Task<IEnumerable<Job>> GetAllAsync();
         Task AddAsync(Job job);
         Task<IEnumerable<Job?>> GetJobsByRecruiterIdAsync(Guid recruiterId);
+        Task<IEnumerable<Job?>> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary);
     }
 }

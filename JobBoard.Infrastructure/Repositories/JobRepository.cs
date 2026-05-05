@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JobBoard.Domain.Entities;
+using JobBoard.Domain.Enums;
 using JobBoard.Domain.Interfaces;
 using JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,30 @@ namespace JobBoard.Infrastructure.Repositories
             return await _context.Jobs
                 .Where(j=>j.CreatedById == recruiterId)
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<Job?>> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary)
+        {
+            var query = _context.Jobs.AsQueryable();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+                query = query.Where(j => 
+                                    j.Title.ToLower().Contains(searchTerm) || 
+                                    j.Description.ToLower().Contains(searchTerm) ||
+                                    j.Location.ToLower().Contains(searchTerm));
+            }
+
+            if (minSalary.HasValue)
+            {
+                query = query.Where(j => j.Salary >= minSalary.Value);
+            }
+
+            if (maxSalary.HasValue)
+            {
+                query = query.Where(j => j.Salary <= maxSalary.Value);
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

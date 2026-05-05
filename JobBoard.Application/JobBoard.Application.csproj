@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Features\Users\" />
     <Folder Include="Common\" />
+    <Folder Include="Features\Users\Commands\" />
+    <Folder Include="Features\Users\NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>

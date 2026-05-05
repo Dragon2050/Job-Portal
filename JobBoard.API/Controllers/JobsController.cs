@@ -41,7 +41,7 @@ namespace JobBoard.API.Controllers
         public async Task<IActionResult> GetMyCreatedJobs()
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-            if(userIdClaim == null)
+            if (userIdClaim == null)
             {
                 return Unauthorized("Invalid token");
             }
@@ -55,10 +55,16 @@ namespace JobBoard.API.Controllers
                 var result = await _mediator.Send(query);
                 return Ok(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(new { Error = ex.Message});
+                return BadRequest(new { Error = ex.Message });
             }
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] GetSearchedJobsQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }

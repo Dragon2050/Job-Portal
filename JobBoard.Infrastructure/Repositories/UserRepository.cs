@@ -1,4 +1,5 @@
-﻿using JobBoard.Domain.Entities;
+using JobBoard.Domain.Entities;
+using JobBoard.Domain.Enums;
 using JobBoard.Domain.Interfaces;
 using JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,24 @@ namespace JobBoard.Infrastructure.Repositories
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync(string searchTerm, Role? role)
+        {
+            var query = _context.Users.AsQueryable();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+                query = query.Where(u =>
+                        u.FullName.ToLower().Contains(searchTerm) ||
+                        u.Email.ToLower().Contains(searchTerm));
+            }
+            if (role.HasValue)
+            {
+                query = query.Where(u =>
+                u.Role == role);
+            }
+            return await query.ToListAsync();
         }
     }
 }
