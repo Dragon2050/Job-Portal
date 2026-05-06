@@ -66,5 +66,56 @@ namespace JobBoard.API.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+        [Authorize(Roles = "Recruiter")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateJobCommand command)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if(userIdClaim == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            var recruiterId = Guid.Parse(userIdClaim.Value);
+            command.RecruiterId = recruiterId;
+            command.JobId = id;
+            try
+            {
+                var result = await _mediator.Send(command);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+        [Authorize(Roles = "Recruiter")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if(userIdClaim == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            var recruiterId = Guid.Parse(userIdClaim.Value);
+            var command = new DeleteJobCommand
+            {
+                JobId = id,
+                RecruiterId = recruiterId
+            };
+            try
+            {
+                var result = await _mediator.Send(command);
+                return result ? Ok("Job deleted successfully") : NotFound("Job not found");
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
     }
 }

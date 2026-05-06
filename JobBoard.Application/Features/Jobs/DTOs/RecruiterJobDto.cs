@@ -13,6 +13,8 @@ namespace JobBoard.Application.Features.Jobs.DTOs
         public string Description { get; set; }
         public string Location { get; set; }
         public decimal Salary { get; set; }
+        public string CompanyName { get; set; } = string.Empty;
+        public DateTime? ApplicationDeadline { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

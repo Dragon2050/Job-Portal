@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,6 +64,16 @@ namespace JobBoard.Infrastructure.Repositories
             }
 
             return await query.ToListAsync();
+        }
+        public async Task UpdateAsync(Job job)
+        {
+            _context.Jobs.Update(job);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteAsync(Job job)
+        {
+            _context.Jobs.Remove(job);
+            await _context.SaveChangesAsync();
         }
     }
 }

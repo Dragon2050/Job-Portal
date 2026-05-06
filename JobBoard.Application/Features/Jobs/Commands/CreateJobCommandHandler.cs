@@ -31,6 +31,8 @@ namespace JobBoard.Application.Features.Jobs.Commands
                 Description = request.Description,
                 Location = request.Location,
                 Salary = request.Salary,
+                CompanyName = request.CompanyName,
+                ApplicationDeadline = request.ApplicationDeadline,
                 CreatedById = request.CreatedById
             };
             await _jobRepository.AddAsync(job);

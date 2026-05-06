@@ -13,6 +13,8 @@ namespace JobBoard.Application.Features.Jobs.Commands
         public string Description { get; set; } = string.Empty;
         public string Location {  get; set; } = string.Empty;
         public decimal Salary { get; set; }
+        public string CompanyName { get; set; } = string.Empty;
+        public DateTime? ApplicationDeadline {get; set;}
         public Guid CreatedById { get; set; }
     }
 }
