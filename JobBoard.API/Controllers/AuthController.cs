@@ -38,5 +38,25 @@ namespace JobBoard.API.Controllers
             });
             return Ok(new { token });
         }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+        {
+
+            await _mediator.Send(command);
+            return Ok(new { message = "If an account exists with that email, a reset link has been sent." });
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            try
+            {
+                await _mediator.Send(command);
+                return Ok(new { message = "Password reset successfully. You can now log in." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

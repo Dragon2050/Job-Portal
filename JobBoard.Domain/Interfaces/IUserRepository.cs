@@ -14,5 +14,6 @@ namespace JobBoard.Domain.Interfaces
         Task<User?> GetByEmailAsync(string email);
         Task AddAsync(User user);
         Task<IEnumerable<User>> GetAllAsync(string? searchTerm, Role? role);
+        Task UpdateAsync(User user);
     }
 }

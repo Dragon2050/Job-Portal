@@ -13,7 +13,7 @@ namespace JobBoard.Application.Mappings
     {
         public JobMappingProfile()
         {
-            CreateMap<Job, JobResponseDto>();
+            CreateMap<Job, JobResponseDto>().ReverseMap();
             CreateMap<Job, RecruiterJobDto>();
         }
     }

@@ -52,5 +52,10 @@ namespace JobBoard.Infrastructure.Repositories
             }
             return await query.ToListAsync();
         }
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

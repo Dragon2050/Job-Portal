@@ -15,6 +15,7 @@ namespace JobBoard.Domain.Entities
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public Role Role { get; set; }
+        public string? CVPath { get; set; } = string.Empty;
 
         // Navigation Properties
         public ICollection<Job> Jobs { get; set; } = new List<Job>();

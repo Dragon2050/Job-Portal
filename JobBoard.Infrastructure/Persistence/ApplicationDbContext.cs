@@ -19,6 +19,7 @@ namespace JobBoard.Infrastructure.Persistence
         public DbSet<Job> Jobs => Set<Job>();
         public DbSet<User> Users => Set<User>();
         public DbSet<JobBoard.Domain.Entities.Application> Applications => Set<JobBoard.Domain.Entities.Application>();
+        public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,12 @@ namespace JobBoard.Infrastructure.Persistence
                 .WithMany(j => j.Applications)
                 .HasForeignKey(a => a.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<PasswordResetToken>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }
