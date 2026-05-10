@@ -21,7 +21,7 @@ namespace JobBoard.API.Controllers
 
         [Authorize(Roles = "Candidate")] // Only Candidates can apply!
         [HttpPost("apply/{jobId}")]
-        public async Task<IActionResult> Apply(Guid jobId)
+        public async Task<IActionResult> Apply(Guid jobId, IFormFile? cvFile)
         {
             // 1. Extract the Candidate's ID securely from their JWT Token
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -31,12 +31,25 @@ namespace JobBoard.API.Controllers
             }
             
             var candidateId = Guid.Parse(userIdClaim.Value);
+            using var memoryStream = new MemoryStream();
+
+            //If they provide a file, convert it to byte[]
+            if(cvFile != null && cvFile.Length > 0)
+            {
+                if(Path.GetExtension(cvFile.FileName).ToLower() != ".pdf")
+                {
+                    return BadRequest(new { Error = "Only PDF files are allowed" });
+                }
+                await cvFile.CopyToAsync(memoryStream);
+            }
 
             // 2. Create the command
             var command = new ApplyToJobCommand
             {
                 JobId = jobId,
-                CandidateId = candidateId
+                CandidateId = candidateId,
+                FileData = memoryStream.ToArray(),
+                FileName = cvFile.FileName
             };
 
             // 3. Send it to the Handler we just wrote
