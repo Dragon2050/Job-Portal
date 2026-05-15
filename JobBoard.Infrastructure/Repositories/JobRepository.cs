@@ -25,10 +25,16 @@ namespace JobBoard.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Job>> GetAllAsync()
+        public async Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _context.Jobs.ToListAsync();
+            var query = _context.Jobs.AsQueryable();
+            var totalCount = await query.CountAsync();
+            var jobs = await query.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (jobs, totalCount);
         }
+
 
         public async Task<Job?> GetByIdAsync(Guid id)
         {
@@ -41,7 +47,7 @@ namespace JobBoard.Infrastructure.Repositories
                 .Where(j=>j.CreatedById == recruiterId)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Job?>> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary)
+        public async Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary, int pageNumber, int pageSize)
         {
             var query = _context.Jobs.AsQueryable();
             if (!string.IsNullOrEmpty(searchTerm))
@@ -63,7 +69,13 @@ namespace JobBoard.Infrastructure.Repositories
                 query = query.Where(j => j.Salary <= maxSalary.Value);
             }
 
-            return await query.ToListAsync();
+            var totalCount = await query.CountAsync();
+
+            var jobs = await query.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (jobs, totalCount);
         }
         public async Task UpdateAsync(Job job)
         {

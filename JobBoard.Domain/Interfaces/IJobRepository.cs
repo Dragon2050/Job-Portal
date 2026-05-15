@@ -10,10 +10,10 @@ namespace JobBoard.Domain.Interfaces
     public interface IJobRepository
     {
         Task<Job?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Job>> GetAllAsync();
+        Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(int pageNumber, int pageSize);
         Task AddAsync(Job job);
         Task<IEnumerable<Job?>> GetJobsByRecruiterIdAsync(Guid recruiterId);
-        Task<IEnumerable<Job?>> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary);
+        Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary, int pageNumber, int pageSize);
         Task UpdateAsync(Job job);
         Task DeleteAsync(Job job);
     }

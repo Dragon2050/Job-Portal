@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using MediatR;
 using JobBoard.Domain.Entities;
 using JobBoard.Application.Features.Jobs.DTOs;
+using JobBoard.Application.Common;
 
 namespace JobBoard.Application.Features.Jobs.Queries
 {
-    public class GetAllJobsQuery : IRequest<IEnumerable<JobResponseDto>>
+    public class GetAllJobsQuery : IRequest<PagedResult<JobResponseDto>>
     {
-
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
 }

@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using JobBoard.Application.Common;
 
 namespace JobBoard.Application.Features.Jobs.Queries
 {
-    public class GetSearchedJobsQueryHandler : IRequestHandler<GetSearchedJobsQuery, IEnumerable<RecruiterJobDto>>
+    public class GetSearchedJobsQueryHandler : IRequestHandler<GetSearchedJobsQuery, PagedResult<RecruiterJobDto>>
     {
         private readonly IJobRepository _jobRepository;
         private readonly IMapper _mapper;
@@ -19,10 +20,17 @@ namespace JobBoard.Application.Features.Jobs.Queries
             _jobRepository = jobRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<RecruiterJobDto>> Handle(GetSearchedJobsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<RecruiterJobDto>> Handle(GetSearchedJobsQuery request, CancellationToken cancellationToken)
         {
-            var jobs = await _jobRepository.GetAllAsync(request.searchTerm, request.MinSalary, request.MaxSalary);
-            return _mapper.Map<IEnumerable<RecruiterJobDto>>(jobs);
+            var (jobs, totalCount) = await _jobRepository.GetAllAsync(request.searchTerm, request.MinSalary, request.MaxSalary, request.PageNumber, request.PageSize);
+            var dtos = _mapper.Map<IEnumerable<RecruiterJobDto>>(jobs);
+            return new PagedResult<RecruiterJobDto>
+            {
+                Items = dtos,
+                TotalCount = totalCount,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
         }
     }
 }

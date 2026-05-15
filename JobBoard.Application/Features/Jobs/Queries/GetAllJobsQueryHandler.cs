@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using JobBoard.Application.Common;
 
 namespace JobBoard.Application.Features.Jobs.Queries
 {
-    public class GetAllJobsQueryHandler : IRequestHandler<GetAllJobsQuery, IEnumerable<JobResponseDto>>
+    public class GetAllJobsQueryHandler : IRequestHandler<GetAllJobsQuery, PagedResult<JobResponseDto>>
     {
         private readonly IJobRepository _jobRepository;
         private readonly IMapper _mapper;
@@ -20,13 +21,21 @@ namespace JobBoard.Application.Features.Jobs.Queries
             _jobRepository = repository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<JobResponseDto>> Handle(
+        public async Task<PagedResult<JobResponseDto>> Handle(
         GetAllJobsQuery request, 
         CancellationToken cancellationToken
         )
         {
-            var jobs = await _jobRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<JobResponseDto>>(jobs);
+            var (jobs, totalCounts) = await _jobRepository.GetAllAsync(request.PageNumber, request.PageSize);
+            
+            var dtos = _mapper.Map<IEnumerable<JobResponseDto>>(jobs);
+            return new PagedResult<JobResponseDto>
+            {
+                Items = dtos,
+                TotalCount = totalCounts,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
         }
     }
 }
