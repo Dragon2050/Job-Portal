@@ -40,12 +40,18 @@ namespace JobBoard.Infrastructure.Repositories
         {
             return await _context.Jobs.FirstOrDefaultAsync(x => x.Id == id);
         }
-        
-        public async Task<IEnumerable<Job?>> GetJobsByRecruiterIdAsync(Guid recruiterId)
+
+        public async Task<(IEnumerable<Job> Jobs, int TotalCount)> GetJobsByRecruiterIdAsync(Guid recruiterId, int pageNumber, int pageSize)
         {
-            return await _context.Jobs
-                .Where(j=>j.CreatedById == recruiterId)
+            var query = _context.Jobs.AsQueryable();
+            query = query.Where(j=> j.CreatedById == recruiterId);
+            var totalCount = await query.CountAsync();
+
+            var jobs = await query.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (jobs, totalCount);
         }
         public async Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary, int pageNumber, int pageSize)
         {

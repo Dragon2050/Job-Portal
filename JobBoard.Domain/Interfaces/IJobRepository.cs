@@ -12,7 +12,7 @@ namespace JobBoard.Domain.Interfaces
         Task<Job?> GetByIdAsync(Guid id);
         Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(int pageNumber, int pageSize);
         Task AddAsync(Job job);
-        Task<IEnumerable<Job?>> GetJobsByRecruiterIdAsync(Guid recruiterId);
+        Task<(IEnumerable<Job> Jobs, int TotalCount)> GetJobsByRecruiterIdAsync(Guid recruiterId, int pageNumber, int pageSize);
         Task<(IEnumerable<Job> Jobs, int TotalCount)> GetAllAsync(string? searchTerm, decimal? minSalary, decimal? maxSalary, int pageNumber, int pageSize);
         Task UpdateAsync(Job job);
         Task DeleteAsync(Job job);

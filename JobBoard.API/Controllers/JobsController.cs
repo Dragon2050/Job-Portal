@@ -38,7 +38,7 @@ namespace JobBoard.API.Controllers
         }
         [Authorize(Roles = "Recruiter")]
         [HttpGet("my-created-jobs")]
-        public async Task<IActionResult> GetMyCreatedJobs()
+        public async Task<IActionResult> GetMyCreatedJobs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -48,7 +48,9 @@ namespace JobBoard.API.Controllers
             var recruiterId = Guid.Parse(userIdClaim.Value);
             var query = new GetMyJobsQuery
             {
-                RecruiterId = recruiterId
+                RecruiterId = recruiterId,
+                PageNumber = pageNumber,
+                PageSize = pageSize
             };
             try
             {
