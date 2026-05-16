@@ -1,5 +1,5 @@
 using MediatR;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Domain.Enums;
 using DomainApplication = JobBoard.Domain.Entities.Application;
 

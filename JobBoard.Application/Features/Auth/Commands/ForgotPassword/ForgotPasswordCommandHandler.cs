@@ -1,5 +1,5 @@
-﻿using JobBoard.Domain.Entities;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Domain.Entities;
+using JobBoard.Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;

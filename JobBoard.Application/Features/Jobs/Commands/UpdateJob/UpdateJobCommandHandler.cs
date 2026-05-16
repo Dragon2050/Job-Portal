@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 
 namespace JobBoard.Application.Features.Jobs.Commands
 {

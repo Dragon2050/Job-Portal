@@ -1,5 +1,5 @@
 using DomainApplication = JobBoard.Domain.Entities.Application;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,6 @@
-﻿using JobBoard.Application.Features.Jobs.DTOs;
+using JobBoard.Application.Features.Jobs.DTOs;
 using JobBoard.Domain.Entities;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;

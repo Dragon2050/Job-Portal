@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using MediatR;
 using JobBoard.Domain.Entities;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Application.Features.Jobs.DTOs;
 using AutoMapper;
 

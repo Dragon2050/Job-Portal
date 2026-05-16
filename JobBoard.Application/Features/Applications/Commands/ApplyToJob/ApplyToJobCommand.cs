@@ -1,6 +1,6 @@
 using JobBoard.Domain.Entities;
 using JobBoard.Domain.Enums;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using MediatR;
 
 namespace JobBoard.Application.Features.Applications.Commands

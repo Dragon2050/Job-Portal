@@ -7,7 +7,7 @@ using JobBoard.Application.Interfaces;
 using JobBoard.Application.Mappings;
 using JobBoard.Domain.Entities;
 using JobBoard.Domain.Enums;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Infrastructure.Auth;
 using JobBoard.Infrastructure.Persistence;
 using JobBoard.Infrastructure.Repositories;

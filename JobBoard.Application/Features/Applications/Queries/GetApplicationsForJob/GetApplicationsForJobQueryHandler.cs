@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Application.Features.Applications.DTOs;
 using System.Collections.Generic;
 using System.Threading;

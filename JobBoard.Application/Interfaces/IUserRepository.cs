@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using JobBoard.Domain.Entities;
 using JobBoard.Domain.Enums;
 
-namespace JobBoard.Domain.Interfaces
+namespace JobBoard.Application.Interfaces
 {
     public interface IUserRepository
     {

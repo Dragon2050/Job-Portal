@@ -1,6 +1,6 @@
 using MediatR;
 using AutoMapper;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Application.Features.Users.DTOs;
 using JobBoard.Application.Common;
 namespace JobBoard.Application.Features.Users.Queries;

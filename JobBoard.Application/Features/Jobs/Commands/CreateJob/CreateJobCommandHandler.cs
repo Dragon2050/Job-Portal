@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using JobBoard.Domain.Entities;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 
 namespace JobBoard.Application.Features.Jobs.Commands
 {

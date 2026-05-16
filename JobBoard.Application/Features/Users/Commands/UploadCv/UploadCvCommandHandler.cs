@@ -1,5 +1,5 @@
 using MediatR;
-using JobBoard.Domain.Interfaces;
+using JobBoard.Application.Interfaces;
 using JobBoard.Application.Interfaces;
 
 namespace JobBoard.Application.Features.Users.Commands
