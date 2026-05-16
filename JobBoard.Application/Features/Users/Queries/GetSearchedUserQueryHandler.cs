@@ -2,8 +2,9 @@ using MediatR;
 using AutoMapper;
 using JobBoard.Domain.Interfaces;
 using JobBoard.Application.Features.Users.DTOs;
+using JobBoard.Application.Common;
 namespace JobBoard.Application.Features.Users.Queries;
-public class GetSearchedUserQueryHandler : IRequestHandler<GetSearchedUsersQuery, IEnumerable<UserDto>>
+public class GetSearchedUserQueryHandler : IRequestHandler<GetSearchedUsersQuery, PagedResult<UserDto>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -13,9 +14,16 @@ public class GetSearchedUserQueryHandler : IRequestHandler<GetSearchedUsersQuery
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<UserDto>> Handle(GetSearchedUsersQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<UserDto>> Handle(GetSearchedUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _userRepository.GetAllAsync(request.SearchTerm, request.Role);
-        return _mapper.Map<IEnumerable<UserDto>>(users);
+        var (users, totalCount) = await _userRepository.GetAllAsync(request.SearchTerm, request.Role, request.PageNumber, request.PageSize);
+        var dtos = _mapper.Map<IEnumerable<UserDto>>(users);
+        return new PagedResult<UserDto>
+        {
+            Items = dtos,
+            TotalCount = totalCount,
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize
+        };
     }
 }

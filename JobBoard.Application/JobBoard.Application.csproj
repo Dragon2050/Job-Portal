@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Users\NewFolder\**" />
+    <EmbeddedResource Remove="Features\Users\NewFolder\**" />
+    <None Remove="Features\Users\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\JobBoard.Domain\JobBoard.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\Users\Commands\" />
-    <Folder Include="Features\Users\NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>

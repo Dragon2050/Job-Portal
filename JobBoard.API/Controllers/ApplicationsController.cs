@@ -66,26 +66,36 @@ namespace JobBoard.API.Controllers
             }
         }
 
+        // JobBoard.API/Controllers/ApplicationsController.cs
+        // Update the GetApplicationsForJob method:
+
         [Authorize(Roles = "Recruiter")]
         [HttpGet("job/{jobId}")]
-        public async Task<IActionResult> GetApplicationsForJob(Guid jobId)
+        public async Task<IActionResult> GetApplicationsForJob(Guid jobId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
 
-            if(userIdClaim == null)
+            if (userIdClaim == null)
             {
                 return Unauthorized("Invalid token");
             }
+
             var recruiterId = Guid.Parse(userIdClaim.Value);
-            try{
-                var applications = await _mediator.Send(new GetApplicationsForJobQuery 
+
+            try
+            {
+                var query = new GetApplicationsForJobQuery
                 {
-                    JobId= jobId,
-                    RecruiterId = recruiterId
-                });
-                return Ok(applications);
+                    JobId = jobId,
+                    RecruiterId = recruiterId,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+
+                var result = await _mediator.Send(query);
+                return Ok(result);
             }
-            catch(UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException ex)
             {
                 // Returns 403 Forbidden
                 return StatusCode(403, new { Error = ex.Message });
@@ -98,7 +108,7 @@ namespace JobBoard.API.Controllers
 
         [Authorize(Roles = "Candidate")]
         [HttpGet("my-applications")]
-        public async Task<IActionResult> GetMyApplications()
+        public async Task<IActionResult> GetMyApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1)
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
 
@@ -110,7 +120,9 @@ namespace JobBoard.API.Controllers
             
             var query = new GetMyApplicationsQuery
             {
-                CandidateId = candidateId
+                CandidateId = candidateId,
+                PageNumber = pageNumber,
+                PageSize = pageSize
             };
             
             try{

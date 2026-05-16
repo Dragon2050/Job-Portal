@@ -35,7 +35,7 @@ namespace JobBoard.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync(string searchTerm, Role? role)
+        public async Task<(IEnumerable<User>, int TotalCount)> GetAllAsync(string searchTerm, Role? role, int pageNumber, int pageSize)
         {
             var query = _context.Users.AsQueryable();
             if (!string.IsNullOrEmpty(searchTerm))
@@ -50,7 +50,12 @@ namespace JobBoard.Infrastructure.Repositories
                 query = query.Where(u =>
                 u.Role == role);
             }
-            return await query.ToListAsync();
+            int totalCount = await query.CountAsync();
+            var users = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            return (users, totalCount);
         }
         public async Task UpdateAsync(User user)
         {

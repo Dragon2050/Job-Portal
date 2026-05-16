@@ -5,10 +5,11 @@ using JobBoard.Application.Features.Applications.DTOs;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using JobBoard.Application.Common;
 
 namespace JobBoard.Application.Features.Applications.Queries
 {
-    public class GetMyApplicationsQueryHandler : IRequestHandler<GetMyApplicationsQuery, IEnumerable<CandidateApplicationDto>>
+    public class GetMyApplicationsQueryHandler : IRequestHandler<GetMyApplicationsQuery, PagedResult<CandidateApplicationDto>>
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly IMapper _mapper;
@@ -17,12 +18,21 @@ namespace JobBoard.Application.Features.Applications.Queries
             _applicationRepository = applicationRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<CandidateApplicationDto>> Handle(GetMyApplicationsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<CandidateApplicationDto>> Handle(GetMyApplicationsQuery request, CancellationToken cancellationToken)
         {
             //Fetch applications for candidate
-            var applications = await _applicationRepository.GetByCandidateIdAsync(request.CandidateId);
+            var (applications, totalCount) = await _applicationRepository.GetByCandidateIdAsync(request.CandidateId, request.PageNumber, request.PageSize);
 
-            return _mapper.Map<IEnumerable<CandidateApplicationDto>>(applications);
+            var dtos = _mapper.Map<IEnumerable<CandidateApplicationDto>>(applications);
+
+            var result = new PagedResult<CandidateApplicationDto>
+            {
+                Items = dtos,
+                TotalCount = totalCount,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
+            return result;
         }
         
     }

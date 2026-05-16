@@ -13,7 +13,7 @@ namespace JobBoard.Domain.Interfaces
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByEmailAsync(string email);
         Task AddAsync(User user);
-        Task<IEnumerable<User>> GetAllAsync(string? searchTerm, Role? role);
+        Task<(IEnumerable<User>, int TotalCount)> GetAllAsync(string? searchTerm, Role? role, int pageNumber, int pageSize);
         Task UpdateAsync(User user);
     }
 }
