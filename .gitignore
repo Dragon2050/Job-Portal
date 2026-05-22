@@ -1,8 +1,6 @@
-bin/
-obj/
+# IDE and System Files
 .vs/
-*.user
+.idea/
 *.suo
-*.log
-*.db
-appsettings.Development.json
+*.user
+*.sln.docstate
