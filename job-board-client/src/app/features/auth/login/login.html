@@ -1,0 +1,54 @@
+<div class="login-container fade-in">
+    <div class="glass-card auth-card">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to find your dream job or manage applications</p>
+        <!-- Form Container -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <!-- 1. Global Error Alert (Shows if backend rejects login) -->
+          @if (errorMessage()) {
+          <div class="alert alert-error">
+            {{ errorMessage() }}
+          </div>
+          }
+          <!-- 2. Email Field -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input id="email" type="email" formControlName="email" class="form-control"
+                   placeholder="you@example.com"
+                   [class.is-invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" />
+            <!--Email Validation-->
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+            <span class="error-text">
+              @if (loginForm.get('email')?.hasError('required')) { Email is required. }
+              @else if (loginForm.get('email')?.hasError('email')) { Please enter a valid email. }
+            </span>
+            }
+          </div>
+          <!-- 3. Password Field -->
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" formControlName="password" class="form-control"
+                   placeholder="*************"
+                   [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" />
+            <!-- Password Validations -->
+            <span class="error-text">
+              @if(loginForm.get('password')?.hasError('required')) {Password is required}
+              @if(loginForm.get('password')?.hasError('minlength')) { Password must be at least 6 characters. }
+            </span>
+          </div>
+          <!--4. Submit button-->
+          <button type="submit" class="btn btn-gradient btn-block" [disabled]="isLoading()">
+            @if(isLoading())
+            {
+            <span class="spinner"></span>
+            Logging in...}
+            @else {Sign In}
+          </button>
+          <!--5. Register Redirect Link-->
+          <p class="auth-redirect">
+            Don't have an account?
+            <a routerLink="/register" class="redirect-link">Create one here</a>
+          </p>
+        </form>
+    </div>
+</div>

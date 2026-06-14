@@ -1,0 +1,158 @@
+/* 1. Main Floating Header Bar */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0; /* Thin slate-gray boundary line */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); /* Very soft drop shadow */
+  z-index: 1000; /* Keeps navbar floating on top of all page content */
+}
+
+/* 2. Container Centering */
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 3. Brand Logo (Outfit font, bold weight) */
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a; /* Dark Slate */
+  letter-spacing: -0.5px;
+}
+
+.logo-accent {
+  color: #4f46e5; /* Indigo Accent */
+}
+
+/* 4. Center Menu Links */
+.nav-menu {
+  height: 100%;
+}
+
+.nav-links {
+  display: flex;
+  height: 100%;
+  list-style: none;
+  gap: 32px;
+}
+
+.nav-links li {
+  height: 100%;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #475569; /* Slate 600 */
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #0f172a; /* Glow darker on hover */
+}
+
+/* Active Page Underline Marker */
+.nav-links a.active-link {
+  color: #4f46e5;
+  border-bottom-color: #4f46e5; /* Adds a solid indigo bar under active link */
+}
+
+/* 5. User Profile / Guest Actions Area */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Guest Button: Sign In */
+.link-login {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.link-login:hover {
+  color: #0f172a;
+}
+
+/* Guest Button: Sign Up */
+.btn-signup {
+  background-color: #4f46e5;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(79, 70, 229, 0.15);
+  transition: all 0.2s ease;
+}
+
+.btn-signup:hover {
+  background-color: #4338ca;
+  transform: translateY(-0.5px);
+}
+
+/* 6. Profile Welcome Badge */
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #475569;
+  background-color: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 50px;
+}
+
+.user-name {
+  color: #0f172a;
+}
+
+/* Small gray indicator capsule showing role type */
+.role-indicator {
+  font-size: 0.75rem;
+  background-color: #cbd5e1;
+  color: #334155;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sign Out Action Button */
+.btn-logout {
+  background-color: transparent;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+  border-color: #ef4444; /* Turns red on hover to indicate danger */
+  color: #ef4444;
+  background-color: #fef2f2;
+}

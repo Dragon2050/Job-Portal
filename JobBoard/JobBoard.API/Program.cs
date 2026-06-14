@@ -99,6 +99,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// 1. Declare the allowed origins (specifically our Angular port 4200)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // <--- HERE IS WHERE IT'S DECLARED!
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -131,6 +143,10 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseStaticFiles(); // <--- Add this!
+
+// 2. Tell the app to use the CORS policy we just declared
+app.UseCors("AllowAngularClient");
+
 
 app.UseHttpsRedirection();
 

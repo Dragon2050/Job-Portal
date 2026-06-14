@@ -1,0 +1,88 @@
+<div class="register-container fade-in">
+  <div class="register-card">
+    <h2 class="register-title"> Create Account</h2>
+    <p class="register-subtitle">Join us to start posting or applying for jobs</p>
+    <!-- 1. Form Submission Wrapper -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!--Error Alert message from Backend-->>
+      @if(errorMessage()){
+      <div class="alert-banner alert-error">
+        {{errorMessage()}}
+      </div>
+      }
+      <!--Success Alert Message-->
+      @if(successMessage()){
+      <div class="alert-banner alert-success">
+        {{successMessage()}}
+      </div>
+      }
+      <!-- 2. Role Selector Toggle Widget -->
+      <label class="form-label">I want to register as a:</label>
+      <div class="role-toggle-container">
+        <button type="button" class="role-btn" [class.active]="selectedRole() === 'Candidate'" (click)="setRole('Candidate')">Candidate (Job Seeker)</button>
+        <button type="button" class="role-btn" [class.active]="selectedRole() === 'Recruiter'" (click)="setRole('Recruiter')">Recruiter (Job Poster)</button>
+      </div>
+      <!--3. Full Name field-->
+      <div class="form-group">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input id="fullName"
+               type="text"
+               formControlName="fullName"
+               class="form-control-light"
+               placeholder="John Doe"
+               [class.is-invalid]="registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid" />
+        @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid) {
+        <span class="error-text">
+          @if (registerForm.get('fullName')?.hasError('required')) { Name is required. }
+          @else if (registerForm.get('fullName')?.hasError('minlength')) { Name must be at least 3 characters. }
+        </span>
+        }
+      </div>
+      <!-- 4. Email Field -->
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input id="email"
+               type="email"
+               formControlName="email"
+               class="form-control-light"
+               placeholder="john@example.com"
+               [class.is-invalid]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" />
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+        <span class="error-text">
+          @if (registerForm.get('email')?.hasError('required')) { Email is required. }
+          @else if (registerForm.get('email')?.hasError('email')) { Please enter a valid email address. }
+        </span>
+        }
+      </div>
+      <!-- 5. Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input id="password"
+               type="password"
+               formControlName="password"
+               class="form-control-light"
+               placeholder="••••••••"
+               [class.is-invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" />
+        @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+        <span class="error-text">
+          @if (registerForm.get('password')?.hasError('required')) { Password is required. }
+          @else if (registerForm.get('password')?.hasError('minlength')) { Password must be at least 6 characters. }
+        </span>
+        }
+      </div>
+        <!-- 6. Submit Button-->
+      <button type="submit" class="btn-submit" [disabled]="isLoading() || successMessage() !==null">
+        @if (isLoading()) {
+        <span class="btn-spinner"></span> Creating Account...
+        } @else {
+        Create Account
+        }
+      </button>
+        <!-- 7. Login Redirect -->
+        <p class="redirect-hint">
+          Already have an account?
+          <a routerLink="/login" class="link-highlight">Sign in here</a>
+        </p>
+    </form>
+  </div>
+</div>

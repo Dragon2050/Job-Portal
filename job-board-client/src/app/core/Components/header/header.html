@@ -1,0 +1,53 @@
+<header class="main-header">
+  <nav class="nav-container">
+    <!-- 1. App Brand Logo -->
+    <a routerLink="/" class="nav-logo">
+      <span class="logo-accent">Job</span>Portal
+    </a>
+    <!-- 2. Dynamic Navigation Links -->
+    <div class="nav-menu">
+      <ul class="nav-links">
+        <!-- Visible to everyone (Guests, Candidates and Recruiters)-->
+        <li>
+          <a routerLink="/jobs" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+            Find Jobs
+          </a>
+        </li>
+        <!-- Links visible only to logged-in Candidates -->
+        @if(isLoggedIn() && userRole() === 'Candidate')
+        {
+        <li>
+          <a routerLink="/my-applications" routerLinkActive="active-link">My Applications</a>
+        </li>
+        }
+        <!-- Links visible only to logged-in Recruiters -->
+        @if(isLoggedIn() && userRole() === 'Recruiter')
+        {
+        <li>
+          <a routerLink="/post-job" routerLinkActive="active-link">Post a Job</a>
+        </li>
+        }
+      </ul>
+    </div>
+    <!-- 3. Profile Actions Area (Right Side) -->
+    <div class="nav-actions">
+      @if (isLoggedIn()) {
+
+      <!-- User Welcome Badge -->
+      <span class="user-badge">
+        Hi, <strong class="user-name">{{ currentUser()?.fullName }}</strong>
+        <span class="role-indicator">{{ userRole() }}</span>
+      </span>
+
+      <!-- Sign Out Button -->
+      <button (click)="onLogout()" class="btn-logout">
+        Sign Out
+      </button>
+      } @else {
+      <!-- Guest Buttons (Visible when Logged Out) -->
+      <a routerLink="/login" class="link-login">Sign In</a>
+      <a routerLink="/register" class="btn-signup">Sign Up</a>
+      }
+    </div>
+  </nav>
+</header>
